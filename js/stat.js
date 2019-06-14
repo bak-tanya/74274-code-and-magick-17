@@ -14,7 +14,7 @@ var TEXT_WIDTH = 16;
 @param {Number} y - исходная координата по оси Y
 @param {String} color - цвет фигуры
 */
-var renderCloud = function(ctx, x, y, color) {
+var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
 };
@@ -24,7 +24,7 @@ var renderCloud = function(ctx, x, y, color) {
 @param {Object} ctx - контекст отображения
 @param {String} text - тескт, который будет выведен на страницу
 */
-var showTextWelcome = function(ctx, text) {
+var showTextWelcome = function (ctx, text) {
   ctx.font = '16px PT Mono';
   ctx.textBaseline = 'hanging';
   ctx.fillStyle = '#000';
@@ -43,7 +43,7 @@ var showTextWelcome = function(ctx, text) {
 @param {Object} ctx - контекст отображения
 @param {String} text - тескт, который будет выведен на страницу
 */
-var showTextError = function(ctx, text) {
+var showTextError = function (ctx, text) {
   ctx.font = '16px PT Mono';
   ctx.textBaseline = 'hanging';
   ctx.fillStyle = 'red';
@@ -62,7 +62,7 @@ var showTextError = function(ctx, text) {
 @param {Array} arr - массив в котором будет осуществляться поиск
 @return {Number} maxElement - найденное максимальное значение
 */
-var getMaxElement = function(arr) {
+var getMaxElement = function (arr) {
   var maxElement = arr[0];
 
   for (var i = 1; i < arr.length; i++) {
@@ -80,7 +80,7 @@ var getMaxElement = function(arr) {
 @param {Array} players - массив с перечнем игроков
 @param {Array} times - массив с перечнем временных показателей игроков
 */
-window.renderStatistics = function(ctx, players, times) {
+window.renderStatistics = function (ctx, players, times) {
   renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, 'rgba(0, 0, 0, 0.7');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
 
