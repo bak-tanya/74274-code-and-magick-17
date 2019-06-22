@@ -1,5 +1,48 @@
 'use strict';
 
+var NUMBER_OF_WIZARDS = 4;
+
+var WizardNames = {
+  FIRST_NAMES: [
+    'Иван',
+    'Хуан Себастьян',
+    'Мария',
+    'Кристоф',
+    'Виктор',
+    'Юлия',
+    'Люпита',
+    'Вашингтон'
+  ],
+  SURNAMES: [
+    'да Марья',
+    'Верон',
+    'Мирабелла',
+    'Вальц',
+    'Онопко',
+    'Топольницкая',
+    'Нионго',
+    'Ирвинг'
+  ]
+};
+
+var Colors = {
+  COAT: [
+    'rgb(101, 137, 164)',
+    'rgb(241, 43, 107)',
+    'rgb(146, 100, 161)',
+    'rgb(56, 159, 117)',
+    'rgb(215, 210, 55)',
+    'rgb(0, 0, 0)'
+  ],
+  EYES: [
+    'black',
+    'red',
+    'blue',
+    'yellow',
+    'green'
+  ]
+};
+
 var userDialog = document.querySelector('.setup');
 userDialog.classList.remove('hidden');
 
@@ -9,51 +52,44 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template')
     .content
     .querySelector('.setup-similar-item');
 
-var NUMBER_OF_WIZARDS = 4;
-var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
-
 /**
  * функция возвращает значение случайного элемента массива
  * @param {Array} arr - массив
- * @return {String} - возращаемое случайно значение
+ * @return {String} - возращаемый случайный элемент массива
 */
-var getRandomData = function (arr) {
-  var j = Math.floor(Math.random() * arr.length);
-  return arr[j];
+var getRandomItemFromArray = function (arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 };
-
-var wizards = [];
 
 /**
  * функция создает массив объектов волшебников
- * @param {Number} wizardNumber - количество создаваемых желементов массива
- * @param {Array} wizardName - массив с возможными именами
- * @param {Array} wizardSurname - массив с возможными фамилиями
- * @param {Array} wizardCoatColor - массив с возможными цветами мантии
- * @param {Array} wizardEyesColor - массив с возможными цветами глаз
+ * @param {Number} wizardCount - количество создаваемых элементов массива
+ * @param {Array.<string>} wizardNames - массив с возможными именами
+ * @param {Array.<string>} wizardSurnames - массив с возможными фамилиями
+ * @param {Array.<string>} wizardCoatColors - массив с возможными цветами мантии
+ * @param {Array.<string>} wizardEyesColors - массив с возможными цветами глаз
+ * @return {Array.<object>} - массив объектов с параметрами волшебников
 */
-var createWizard = function (wizardNumber, wizardName, wizardSurname, wizardCoatColor, wizardEyesColor) {
-  for (var i = 0; i < wizardNumber; i++) {
-    var wizard = {};
-
-    wizard.name = getRandomData(wizardName);
-    wizard.surname = getRandomData(wizardSurname);
-    wizard.coatColor = wizardCoatColor[i];
-    wizard.eyesColor = wizardEyesColor[i];
-
-    wizards[i] = wizard;
+var createWizards = function (wizardCount, wizardNames, wizardSurnames, wizardCoatColors, wizardEyesColors) {
+  var wizards = [];
+  for (var i = 0; i < wizardCount; i++) {
+    wizards[i] = {
+      name: getRandomItemFromArray(wizardNames),
+      surname: getRandomItemFromArray(wizardSurnames),
+      coatColor: getRandomItemFromArray(wizardCoatColors),
+      eyesColor: getRandomItemFromArray(wizardEyesColors)
+    };
   }
+
+  return wizards;
 };
 
-createWizard(NUMBER_OF_WIZARDS, WIZARD_NAMES, WIZARD_SURNAMES, COAT_COLORS, EYES_COLORS);
+var wizards = createWizards(NUMBER_OF_WIZARDS, WizardNames.FIRST_NAMES, WizardNames.SURNAMES, Colors.COAT, Colors.EYES);
 
 /**
  * создает новый DOM-элемент с волшебником и передает ему значения
- * @param {Array} wizard - массив, данными которого будет заполняться новый элемент
- * @return {NodeList} - блок, выводящий очередного волшебника
+ * @param {Array.<object>} wizard - массив, данными которого будет заполняться новый элемент
+ * @return {NodeList} - блок, выводящий очередного волшебника на странице
 */
 var renderWizard = function (wizard) {
   var wizardElement = similarWizardTemplate.cloneNode(true);
@@ -66,9 +102,9 @@ var renderWizard = function (wizard) {
 };
 
 var fragment = document.createDocumentFragment();
-for (var i = 0; i < wizards.length; i++) {
-  fragment.appendChild(renderWizard(wizards[i]));
-}
+wizards.forEach(function (wizard) {
+  fragment.appendChild(renderWizard(wizard));
+});
 
 similarListElement.appendChild(fragment);
 userDialog.querySelector('.setup-similar').classList.remove('hidden');

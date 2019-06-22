@@ -8,8 +8,20 @@ var CLOUD_HEIGHT = 270;
 var TEXT_WIDTH = 16;
 var MAX_BAR_HEIGHT = 150;
 
+var Colors = {
+  white: '#fff',
+  grey: 'rgba(0, 0, 0, 0.7',
+  red: 'rgba(255, 0, 0, 1)',
+  black: '#000',
+};
+
+var Gaps = {
+  GAP_Y_SCORE: GAP * 3 + TEXT_WIDTH * 2,
+  GAP_Y_BAR: GAP * 4 + TEXT_WIDTH * 3,
+  GAP_Y_NAME: GAP * 5 + TEXT_WIDTH * 3,
+};
 /**
- * функция, при вызове которой будет рисоваться прямоугольник.
+ * функция, при вызове которой будет рисоваться прямоугольник
  * @param {Object} ctx - контекст отображения
  * @param {Number} x - исходная координата по оси X
  * @param {Number} y - исходная координата по оси Y
@@ -23,7 +35,7 @@ var renderCloud = function (ctx, x, y, width, height, color) {
 };
 
 /**
- * функция, при вызове которой будет выведен контекст
+ * функция, при вызове которой будет выведен текст
  * @param {Object} ctx - контекст отображения
  * @param {String} text - текст, который будет выведен
  * @param {String} color - цвет текста
@@ -37,15 +49,15 @@ var showText = function (ctx, text, color, x, y, lineHeight) {
   ctx.fillStyle = color;
   var textArray = text.split('\n');
 
-  textArray.forEach(function (item) {
-    ctx.fillText(item, x, y);
+  textArray.forEach(function (line) {
+    ctx.fillText(line, x, y);
     y += lineHeight;
   });
 };
 
 /**
  * функция для нахождения в массиве элемента с максимальным значением
- * @param {Array} arr - массив в котором будет осуществляться поиск
+ * @param {Array.<Number>} arr - массив в котором будет осуществляться поиск
  * @return {Number} найденное максимальное значение
 */
 var getMaxElementFromArray = function (arr) {
@@ -62,12 +74,12 @@ var getMaxElementFromArray = function (arr) {
 /**
  * функция, выводящая статистику прохождения игры
  * @param {Object} ctx - контекст отображения
- * @param {Array} players - массив с перечнем игроков
- * @param {Array} times - массив с перечнем временных показателей игроков
+ * @param {Array.<String>} players - массив с перечнем игроков
+ * @param {Array.<Number>} times - массив с перечнем временных показателей игроков
 */
 window.renderStatistics = function (ctx, players, times) {
-  renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, CLOUD_WIDTH, CLOUD_HEIGHT, 'rgba(0, 0, 0, 0.7');
-  renderCloud(ctx, CLOUD_X, CLOUD_Y, CLOUD_WIDTH, CLOUD_HEIGHT, '#fff');
+  renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, CLOUD_WIDTH, CLOUD_HEIGHT, Colors.grey);
+  renderCloud(ctx, CLOUD_X, CLOUD_Y, CLOUD_WIDTH, CLOUD_HEIGHT, Colors.white);
 
   if (players.length && times.length) {
     var maxTime = getMaxElementFromArray(times);
@@ -86,18 +98,18 @@ window.renderStatistics = function (ctx, players, times) {
 
       var barHeight = times[i] * MAX_BAR_HEIGHT / maxTime;
       var barX = CLOUD_X + barGap + (barWidth + barGap) * i;
-      var barY = CLOUD_Y + GAP * 4 + TEXT_WIDTH * 3 + (MAX_BAR_HEIGHT - barHeight);
+      var barY = CLOUD_Y + Gaps.GAP_Y_BAR + (MAX_BAR_HEIGHT - barHeight);
 
       var nameX = CLOUD_X + barGap + (barWidth + barGap) * i;
-      var nameY = CLOUD_Y + GAP * 5 + TEXT_WIDTH * 3 + MAX_BAR_HEIGHT;
+      var nameY = CLOUD_Y + Gaps.GAP_Y_NAME + MAX_BAR_HEIGHT;
 
       var scoreX = CLOUD_X + barGap + (barWidth + barGap) * i;
-      var scoreY = CLOUD_Y + GAP * 3 + TEXT_WIDTH * 2 + (MAX_BAR_HEIGHT - barHeight);
+      var scoreY = CLOUD_Y + Gaps.GAP_Y_SCORE + (MAX_BAR_HEIGHT - barHeight);
 
-      var color = players[i] === 'Вы' ? 'rgba(255, 0, 0, 1)' : 'hsl(240, ' + (Math.random() * 100 + 1) + '%, 50%)';
+      var color = players[i] === 'Вы' ? Colors.red : 'hsl(240, ' + (Math.random() * 100 + 1) + '%, 50%)';
 
       var textWelcome = 'Ура вы победили!\nСписок результатов:';
-      showText(ctx, textWelcome, '#000', CLOUD_X + GAP, CLOUD_Y + GAP, TEXT_WIDTH + GAP);
+      showText(ctx, textWelcome, Colors.black, CLOUD_X + GAP, CLOUD_Y + GAP, TEXT_WIDTH + GAP);
 
       ctx.fillStyle = color;
       ctx.fillText(Math.round(times[i]), scoreX, scoreY);
@@ -106,6 +118,6 @@ window.renderStatistics = function (ctx, players, times) {
     }
   } else {
     var textError = 'К сожалению, данные для отображения\nстатистики не переданы';
-    showText(ctx, textError, 'hsl(353, 100%, 50%)', CLOUD_X + GAP, CLOUD_Y + GAP, TEXT_WIDTH + GAP);
+    showText(ctx, textError, Colors.red, CLOUD_X + GAP, CLOUD_Y + GAP, TEXT_WIDTH + GAP);
   }
 };
