@@ -151,9 +151,9 @@ userAppearance.addEventListener('click', function (evt) {
   }
 });
 
-userFireball.addEventListener('click', function () {
-  if (this.classList.contains('setup-fireball-wrap')) {
-    var currentTarget = this;
+userFireball.addEventListener('click', function (evt) {
+  var currentTarget = evt.currentTarget;
+  if (currentTarget.classList.contains('setup-fireball-wrap')) {
     changeColorElement(currentTarget, WizardColors.FIREBALL, false, inputUserFireballColor);
   }
 });
